@@ -44,10 +44,13 @@ def load_imgs(folder_path, is_gray=False):
 
 def plot_imgs(
     list_imgs,
-    title,
-    rows,
-    cols,
-    is_gray = False
+    list_imgs_title=None,
+    title="",
+    rows=1,
+    cols=None,
+    figsize=5,
+    is_gray=False,
+    cmap="gray"
 ):
     """
     Args:
@@ -59,16 +62,19 @@ def plot_imgs(
     Returns:
         None
     """
-    fig, axes = plt.subplots(rows, cols, figsize=(5 * cols, 5 * rows))
+    cols = len(list_imgs) if not cols else cols
+
+    fig, axes = plt.subplots(rows, cols, figsize=(figsize * cols, figsize * rows))
 
     fig.suptitle(title, fontsize=16, fontweight="bold")
 
     for i, image in enumerate(list_imgs):
         if is_gray:
-            axes[i].imshow(image, cmap="gray")
+            axes[i].imshow(image, cmap=cmap)
         else:
             axes[i].imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-        axes[i].set_title(f"Image {i+1}")
+        if list_imgs_title:
+            axes[i].set_title(list_imgs_title[i], fontsize=int(figsize*2.5))
         axes[i].axis("off")
 
     plt.tight_layout()
